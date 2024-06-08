@@ -2,6 +2,7 @@ package com.example.osrm_demo.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -10,12 +11,11 @@ import reactor.core.publisher.Mono;
 @Service
 public class RoutingService {
 
-
     private final WebClient webClient;
     private final ObjectMapper objectMapper;
 
-    public RoutingService() {
-        this.webClient = WebClient.create("http://localhost:5000");
+    public RoutingService(@Value("${osrm.server.url}") String osrmServerUrl) {
+        this.webClient = WebClient.create(osrmServerUrl);
         this.objectMapper = new ObjectMapper();
     }
 
@@ -57,5 +57,4 @@ public class RoutingService {
             return "Fehler bei der Routenberechnung: " + e.getMessage();
         }
     }
-
 }
